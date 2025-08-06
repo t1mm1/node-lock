@@ -1,0 +1,10 @@
+name: Node lock
+type: module
+description: 'Simple node lock for locking node content.'
+core_version_requirement: ^10 || ^11
+configure: node_lock.settings
+package: Custom
+dependencies:
+  - drupal:field
+  - drupal:node
+  - drupal:user

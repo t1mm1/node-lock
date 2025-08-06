@@ -1,0 +1,13 @@
+entity.node_lock.collection:
+  title: 'Node lock'
+  parent: system.admin_structure
+  description: 'Lock list of nodes.'
+  route_name: entity.node_lock.collection
+  weight: -999
+
+node_lock.settings:
+  title: 'Node lock settings'
+  route_name: node_lock.settings
+  description: 'Administer node locking settings.'
+  parent: system.admin_config_content
+  weight: 99

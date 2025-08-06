@@ -1,0 +1,35 @@
+services:
+  _defaults:
+    autoconfigure: true
+    autowire: true
+  node_lock.lock:
+    class: Drupal\node_lock\Lock\Lock
+    arguments: [
+      '@entity_type.manager',
+      '@current_user',
+      '@config.factory',
+    ]
+  node_lock.access:
+    class: Drupal\node_lock\Access\Access
+    arguments: [
+      '@node_lock.lock',
+    ]
+    tags:
+      - { name: access_check }
+  node_lock.helper:
+    class: Drupal\node_lock\Helper
+    arguments: [
+      '@messenger',
+      '@date.formatter',
+      '@current_user',
+    ]
+    tags:
+      - { name: access_check }
+  node_lock.route_subscriber:
+    class: Drupal\node_lock\EventSubscriber\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  Drupal\node_lock\Lock\LockInterface: '@node_lock.lock'
+  Drupal\node_lock\Access\AccessInterface: '@node_lock.access'
+  Drupal\node_lock\Helper: '@node_lock.helper'

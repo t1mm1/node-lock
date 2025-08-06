@@ -1,0 +1,91 @@
+#id_content_lock.node.lock.form.enable:
+#  path: '/node/{node}/lock-form-enable'
+#  defaults:
+#    _controller: '\Drupal\id_content_lock\Controller\Directly::lockEnableByLink'
+#    _title: 'Content Lock Confirmation'
+#  requirements:
+#    _permission: 'break content lock'
+#    _custom_access: '\Drupal\id_content_lock\Controller\Directly::accessEnableByLink'
+#  options:
+#    _admin_route: TRUE
+#    parameters:
+#      node:
+#        type: entity:node
+#
+#id_content_lock.node.lock.link.enable:
+#  path: '/node/{node}/lock-link-enable'
+#  defaults:
+#    _controller: '\Drupal\id_content_lock\Controller\Directly::lockEnableByLink'
+#    _title: 'Content Lock Directly'
+#  requirements:
+#    _permission: 'break content lock'
+#  options:
+#    _admin_route: TRUE
+#    parameters:
+#      node:
+#        type: entity:node
+#
+#id_content_lock.node.lock.form.disable:
+#  path: '/node/{node}/lock-form-disable'
+#  defaults:
+#    _form: '\Drupal\id_content_lock\Form\Lock'
+#    _title: 'Content Unlock Confirmation'
+#  requirements:
+#    _permission: 'break content lock'
+#    _custom_access: '\Drupal\id_content_lock\Form\Lock::accessLockDisable'
+#  options:
+#    _admin_route: TRUE
+#    parameters:
+#      node:
+#        type: entity:node
+#
+#
+#id_content_lock.node.lock.link.disable:
+#  path: '/node/{node}/lock-link-disable'
+#  defaults:
+#    _controller: '\Drupal\id_content_lock\Controller\Directly::lockDisableByLink'
+#    _title: 'Content Unlock Directly'
+#  requirements:
+#    _permission: 'break content lock'
+#    _custom_access: '\Drupal\id_content_lock\Controller\Directly::accessDisableByLink'
+#  options:
+#    _admin_route: TRUE
+#    parameters:
+#      node:
+#        type: entity:node
+
+node_lock.form.lock:
+  path: '/node/{node}/lock'
+  defaults:
+    _form: '\Drupal\node_lock\Form\LockForm'
+    _title: 'Node lock Confirmation'
+  requirements:
+    _custom_access: 'node_lock.access:lock'
+  options:
+    _admin_route: TRUE
+    parameters:
+      node:
+        type: entity:node
+
+node_lock.form.unlock:
+  path: '/node/{node}/unlock'
+  defaults:
+    _form: '\Drupal\node_lock\Form\UnlockForm'
+    _title: 'Node unlock Confirmation'
+  requirements:
+    _custom_access: 'node_lock.access:unlock'
+  options:
+    _admin_route: TRUE
+    parameters:
+      node:
+        type: entity:node
+
+node_lock.settings:
+  path: '/admin/config/content/node-lock-settings'
+  defaults:
+    _form: '\Drupal\node_lock\Form\SettingsForm'
+    _title: 'Node lock settings'
+  requirements:
+    _permission: 'administer content'
+  options:
+    _admin_route: TRUE
