@@ -1,9 +1,3 @@
-#node_lock.node.lock.form.enable:
-#  route_name: id_content_lock.node.lock.form.enable
-#  base_route: entity.node.canonical
-#  title: 'Lock'
-#  weight: 5
-
 node_lock.form.lock:
   route_name: node_lock.form.lock
   base_route: entity.node.canonical
