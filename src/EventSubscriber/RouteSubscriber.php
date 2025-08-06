@@ -20,13 +20,6 @@ class RouteSubscriber extends RouteSubscriberBase {
         '\Drupal\node_lock\Controller\EntityTitleController::getTitleNodeLockList'
       );
     }
-
-    if ($route = $collection->get('entity.node_lock.delete_form')) {
-      $route->setDefault(
-        '_title_callback',
-        '\Drupal\node_lock\Controller\EntityTitleController::getTitleNodeLockList'
-      );
-    }
   }
 
 }

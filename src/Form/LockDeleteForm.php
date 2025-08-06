@@ -13,7 +13,7 @@ class LockDeleteForm extends ContentEntityDeleteForm {
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return $this->t('Are you sure you want to delete lock');
+    return $this->t('Are you sure you want to delete lock?');
   }
 
   /**
