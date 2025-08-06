@@ -57,7 +57,7 @@ class FormAlter {
     }
 
     // Check is it edit form and set visible for lock/unlock buttons.
-    $is_edit_form = $this->helper->isEditForm($entity, $form_id);
+    $is_edit_form = $this->helper->isFormEdit($entity, $form_id);
 
     $is_locked_entity = $this->lock->isLockedEntity($entity);
     // If node was not locked yet.
@@ -79,11 +79,15 @@ class FormAlter {
         $this->helper->setMessageAsOwner($lock);
       }
 
+      if ($this->helper->isFormDelete($entity, $form_id) && $is_owner) {
+        return;
+      }
+
       // Disable form.
       $this->helper->disableForm($form);
 
       // Unset actions.
-      $this->helper->unsetActions($form);
+      $this->helper->unsetActions($form, $is_owner);
 
       // Unset state.
       $this->helper->unsetModerationState($form);

@@ -107,8 +107,27 @@ class Helper {
    * @return bool
    *   The check for edit form.
    */
-  public function isEditForm(EntityInterface $entity, string $form_id): bool {
+  public function isFormEdit(EntityInterface $entity, string $form_id): bool {
     if ($form_id !== $entity->getEntityTypeId() . '_' . $entity->bundle() . '_edit_form') {
+      return FALSE;
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Help function for checking is current for delete ot not.
+   *
+   * @param EntityInterface $entity
+   *   The source entity.
+   * @param string $form_id
+   *   The form id.
+   *
+   * @return bool
+   *   The check for edit form.
+   */
+  public function isFormDelete(EntityInterface $entity, string $form_id): bool {
+    if ($form_id !== $entity->getEntityTypeId() . '_' . $entity->bundle() . '_delete_form') {
       return FALSE;
     }
 
@@ -120,14 +139,20 @@ class Helper {
    *
    * @param array $form
    *   The source form.
+   * @param bool $owner
+   *   The owner of lock.
    */
-  public function unsetActions(array &$form): void {
-    foreach (['delete', 'publish', 'unpublish'] as $key) {
-      if (isset($form['actions'][$key])) {
-        unset($form['actions'][$key]);
+  public function unsetActions(array &$form, bool $owner = FALSE): void {
+    $actions = ['publish', 'unpublish'];
+    if (!$owner) {
+      $actions = $actions + ['delete'];
+    }
+    foreach ($actions as $action) {
+      if (isset($form['actions'][$action])) {
+        unset($form['actions'][$action]);
       }
-      if (isset($form[$key])) {
-        unset($form[$key]);
+      if (isset($form[$action])) {
+        unset($form[$action]);
       }
     }
   }

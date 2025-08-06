@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Link;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class NodeLockListBuilder extends EntityListBuilder {
@@ -104,10 +105,10 @@ class NodeLockListBuilder extends EntityListBuilder {
    * @param EntityInterface $entity
    *   The item list entity.
    *
-   * @return Link|null
+   * @return Link|TranslatableMarkup|null
    *   Link to node.
    */
-  public function getNodeLink(EntityInterface $entity): Link|null {
+  public function getNodeLink(EntityInterface $entity): Link|TranslatableMarkup|null {
     $parent = $entity->get('parent')->target_id;
 
     try {

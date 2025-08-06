@@ -4,14 +4,3 @@
  * @file
  * Hooks for node_lock.module.
  */
-
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\node_lock\Hook\Lock;
-
-/**
- * Implements hook_entity_predelete().
- */
-#[LegacyHook]
-function node_lock_entity_predelete(EntityInterface $entity): void {
-  \Drupal::service(Lock::class)->entityDelete($entity);
-}
