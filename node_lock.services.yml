@@ -25,10 +25,6 @@ services:
     ]
     tags:
       - { name: access_check }
-  node_lock.route_subscriber:
-    class: Drupal\node_lock\EventSubscriber\RouteSubscriber
-    tags:
-      - { name: event_subscriber }
 
   Drupal\node_lock\Lock\LockInterface: '@node_lock.lock'
   Drupal\node_lock\Access\AccessInterface: '@node_lock.access'

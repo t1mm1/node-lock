@@ -116,15 +116,16 @@ class Lock implements LockInterface {
    */
   public function setLock(EntityInterface $entity): EntityInterface|false {
     try {
-      LockEntity::create([
+      $lock = LockEntity::create([
         'parent' => $entity->id(),
         'langcode' => $entity->language()->getId(),
-      ])->save();
+      ]);
+      $lock->save();
 
       // Clear cache for parent.
       Cache::invalidateTags(['node:' . $entity->id()]);
 
-      return $this->getLock($entity);
+      return $lock;
     }
     catch (\Exception $e) {
       return FALSE;

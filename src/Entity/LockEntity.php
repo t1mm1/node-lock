@@ -15,6 +15,7 @@ use Drupal\user\UserInterface;
  * @ContentEntityType(
  *   id = "node_lock",
  *   label = @Translation("Node lock"),
+ *   label_collection = @Translation("Locks list"),
  *   base_table = "node_lock",
  *   data_table = "node_lock_field_data",
  *   entity_keys = {
