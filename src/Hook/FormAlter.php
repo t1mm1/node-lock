@@ -18,6 +18,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  * Generic form alter hook implementation for the Content Lock module.
  */
 class FormAlter {
+
   use DependencySerializationTrait;
   use StringTranslationTrait;
 
@@ -40,7 +41,6 @@ class FormAlter {
     }
 
     /** @var \Drupal\node\NodeInterface $entity */
-    // If current entity is not
     $entity = $form_state->getFormObject()->getEntity();
     if (!$entity instanceof NodeInterface) {
       return;
