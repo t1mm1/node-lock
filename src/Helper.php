@@ -29,14 +29,14 @@ class Helper {
    * @var \Drupal\Core\Datetime\DateFormatter
    *   The date formatter service.
    */
-  protected $dateFormatter;
+  protected DateFormatter $dateFormatter;
 
   /**
    * The current user.
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $currentUser;
+  protected AccountInterface $currentUser;
 
   /**
    * Constructs a new Helper object.

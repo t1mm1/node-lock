@@ -2,11 +2,11 @@
 
 namespace Drupal\node_lock;
 
+use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -14,9 +14,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class NodeLockListBuilder extends EntityListBuilder {
 
   /**
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * The date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatter
+   *   The date formatter service.
    */
-  protected EntityTypeManagerInterface $entityTypeManager;
+  protected DateFormatter $dateFormatter;
 
   /**
    * {@inheritdoc}
@@ -24,11 +27,11 @@ class NodeLockListBuilder extends EntityListBuilder {
   public function __construct(
     EntityTypeInterface $entity_type,
     EntityStorageInterface $storage,
-    EntityTypeManagerInterface $entity_type_manager,
+    DateFormatter $date_formatter,
   ) {
     parent::__construct($entity_type, $storage);
 
-    $this->entityTypeManager = $entity_type_manager;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -41,7 +44,7 @@ class NodeLockListBuilder extends EntityListBuilder {
     return new static(
       $entity_type,
       $container->get('entity_type.manager')->getStorage($entity_type->id()),
-      $container->get('entity_type.manager'),
+      $container->get('date.formatter'),
     );
   }
 
@@ -109,14 +112,7 @@ class NodeLockListBuilder extends EntityListBuilder {
    *   Link to node.
    */
   public function getNodeLink(EntityInterface $entity): Link|TranslatableMarkup|null {
-    $parent = $entity->get('parent')->target_id;
-
-    try {
-      $node = $this->entityTypeManager->getStorage('node')->load($parent);
-    }
-    catch (\Exception $e) {
-      return NULL;
-    }
+    $node = $entity->get('parent')->entity;
 
     if ($node) {
       $link = Link::fromTextAndUrl(
@@ -125,7 +121,7 @@ class NodeLockListBuilder extends EntityListBuilder {
       );
     }
     else {
-      $link = $this->t('Node [@nid] was removed.', ['@nid' => $parent]);
+      $link = $this->t('Node was removed.');
     }
 
     return $link;
@@ -141,20 +137,13 @@ class NodeLockListBuilder extends EntityListBuilder {
    *   Link to profile.
    */
   public function getProfileLink(EntityInterface $entity): Link|null {
-    $uid = $entity->get('uid')->target_id;
-
-    try {
-      $user = $this->entityTypeManager->getStorage('user')->load($uid);
-    }
-    catch (\Exception $e) {
-      return NULL;
-    }
+    $user = $entity->getUser();
 
     if ($user) {
       $link = $user->toLink($user->getDisplayName());
     }
     else {
-      $link = $this->t('[User @uid was removed]', ['@uid' => $uid]);
+      $link = $this->t('[User was removed]');
     }
 
     return $link;
@@ -172,7 +161,7 @@ class NodeLockListBuilder extends EntityListBuilder {
    *   Link to unlock node.
    */
   public function getLockCreated(EntityInterface $entity, $format = 'short'): string {
-    return \Drupal::service('date.formatter')->format($entity->get('created')->value, $format);
+    return $this->dateFormatter->format($entity->get('created')->value, $format);
   }
 
 }
