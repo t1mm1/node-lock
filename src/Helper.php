@@ -187,8 +187,8 @@ class Helper {
    */
   public function setMessageAsUser(EntityInterface $entity): void {
     $this->messenger->addMessage(
-      $this->t('This node was locked by <strong>@link</strong> at <strong>@date</strong>.', [
-        '@link' => $this->getOwnerOrUserName($entity),
+      $this->t('@user has marked the node at <strong>@date</strong>.', [
+        '@user' => $this->getOwnerOrUserName($entity),
         '@date' => $this->getDateCreated($entity),
       ])
     );
@@ -202,7 +202,7 @@ class Helper {
    */
   public function setMessageAsOwner(EntityInterface $entity): void {
     $this->messenger->addMessage(
-      $this->t('This node was locked by <strong>you</strong> at <strong>@date</strong>.', [
+      $this->t('You have locked the node at <strong>@date</strong>.', [
         '@date' => $this->getDateCreated($entity),
       ])
     );

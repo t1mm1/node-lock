@@ -4,6 +4,7 @@ namespace Drupal\node_lock\Form;
 
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\node_lock\Lock\LockInterface;
@@ -92,7 +93,10 @@ class LockForm extends ConfirmFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     try {
       $this->lock->setLock($this->entity);
-      $this->messenger()->addMessage('You have locked this page successfully. Other authorised users will not be able to edit and publish content within the page.');
+
+      $message = $this->t('You have locked this page successfully.<br />Other authorised users will not be able to edit and publish content within the page.');
+      $this->messenger()->addMessage(Markup::create($message));
+
       $form_state->setRedirect('entity.node.edit_form', ['node' => $this->entity->id()]);
     }
     catch (\Exception $exception) {
