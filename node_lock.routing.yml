@@ -30,6 +30,6 @@ node_lock.settings:
     _form: '\Drupal\node_lock\Form\SettingsForm'
     _title: 'Node lock settings'
   requirements:
-    _permission: 'administer content'
+    _permission: 'administer site configuration'
   options:
     _admin_route: TRUE

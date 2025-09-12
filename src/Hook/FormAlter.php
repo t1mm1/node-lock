@@ -2,6 +2,8 @@
 
 namespace Drupal\node_lock\Hook;
 
+use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\node_lock\Helper;
 use Drupal\node_lock\Lock\LockInterface;
@@ -40,37 +42,56 @@ class FormAlter {
       return;
     }
 
-    /** @var \Drupal\node\NodeInterface $entity */
-    $entity = $form_state->getFormObject()->getEntity();
-    if (!$entity instanceof NodeInterface) {
+    /** @var \Drupal\node\NodeInterface $node */
+    $node = $form_state->getFormObject()->getEntity();
+    if (!$node instanceof NodeInterface) {
       return;
     }
 
     // If this is a new created one.
-    if ($entity->isNew()) {
+    if ($node->isNew()) {
       return;
     }
 
     // Check if we must lock this entity.
-    if (!$this->lock->isLockable($entity)) {
+    if (!$this->lock->isLockable($node)) {
       return;
     }
 
     // Check is it edit form and set visible for lock/unlock buttons.
-    $is_edit_form = $this->helper->isFormEdit($entity, $form_id);
+    $is_edit_form = $this->helper->isFormEdit($node, $form_id);
 
-    $is_locked_entity = $this->lock->isLockedEntity($entity);
+    $is_locked_entity = $this->lock->isLockedEntity($node);
     // If node was not locked yet.
     if (!$is_locked_entity) {
-      // Add lock button.
-      $form['actions']['lock'] = $this->helper->getButton($entity, FALSE, $is_edit_form);
+      $form['actions']['lock'] = $this->helper->getButton($node, FALSE, $is_edit_form);
     }
 
     // If entity has lock.
     if ($is_locked_entity) {
       // Set message for users.
-      $is_owner = $this->lock->isOwner($entity);
-      $lock = $this->lock->getLock($entity);
+      $is_owner = $this->lock->isOwner($node);
+      $lock = $this->lock->getLock($node);
+
+      if (isset($form['advanced'])) {
+        $form['node_lock_options'] = [
+          '#type' => 'details',
+          '#title' => t('Lock node settings'),
+          '#description' => t('Current node was marked as locked.<br /><br />To change the default settings go to @settings_link.', [
+            '@settings_link' => Link::fromTextAndUrl(t('settings page'), Url::fromRoute('node_lock.settings', [], [
+              'attributes' => [
+                'target' => '_blank',
+              ],
+            ]))->toString(),
+          ]),
+          '#group' => 'advanced',
+          '#weight' => 20,
+          '#attributes' => [
+            'class' => ['node-form-lock-options'],
+          ],
+          '#open' => 1,
+        ];
+      }
 
       if (!$is_owner) {
         $this->helper->setMessageAsUser($lock);
@@ -79,7 +100,7 @@ class FormAlter {
         $this->helper->setMessageAsOwner($lock);
       }
 
-      if ($this->helper->isFormDelete($entity, $form_id) && $is_owner) {
+      if ($this->helper->isFormDelete($node, $form_id) && $is_owner) {
         return;
       }
 
@@ -93,7 +114,7 @@ class FormAlter {
       $this->helper->unsetModerationState($form);
 
       // Add button.
-      $form['actions']['unlock'] = $this->helper->getButton($entity, TRUE, $is_edit_form, $is_owner, $this->lock->isBypass());
+      $form['actions']['unlock'] = $this->helper->getButton($node, TRUE, $is_edit_form, $is_owner, $this->lock->isBypass());
     }
   }
 

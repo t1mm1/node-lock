@@ -57,9 +57,7 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
-    return [
-      'node_lock.settings',
-    ];
+    return ['node_lock.settings'];
   }
 
   /**
@@ -85,7 +83,7 @@ class SettingsForm extends ConfigFormBase {
     $form['general']['enabled'] = [
       '#type' => 'checkbox',
       '#title' => t('Enable'),
-      '#description' => t('Enable lock/unlock operations.'),
+      '#description' => t('Enable lock/unlock service.'),
       '#default_value' => $config->get('enabled'),
       '#return_value' => 1,
       '#empty' => 0,
