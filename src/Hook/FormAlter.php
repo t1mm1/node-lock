@@ -76,8 +76,7 @@ class FormAlter {
       if (isset($form['advanced'])) {
         $description = $is_owner ? $this->helper->getMessageAsOwner($lock) : $this->helper->getMessageAsUser($lock);
         if ($this->currentUser->hasPermission('administer site configuration')) {
-          $description .= '<br /><br />';
-          $description .= $this->t('To change the default settings go to @settings_link.', [
+          $description .= '<br /><br />' . $this->t('To change the default settings go to @settings_link.', [
             '@settings_link' => Link::fromTextAndUrl(t('settings page'), Url::fromRoute('node_lock.settings', [], [
               'attributes' => [
                 'target' => '_blank',
