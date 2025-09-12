@@ -91,30 +91,33 @@ class SettingsForm extends ConfigFormBase {
 
     $form['bundles'] = [
       '#type' => 'details',
-      '#title' => $this->t('Bundles'),
+      '#title' => $this->t('Content type settings'),
       '#open' => TRUE,
       '#tree' => TRUE,
       '#weight' => 1,
     ];
 
+    $bundle_settings = $config->get('bundles') ?: [];
     $definition = $this->entityTypeManager->getDefinition($this->type);
     if ($definition->getBundleEntityType()) {
       $bundles = $this->entityTypeManager
         ->getStorage($definition->getBundleEntityType())
         ->loadMultiple();
 
-      $options = [];
       foreach ($bundles as $bundle) {
-        $options[$bundle->id()] = $bundle->label();
-      }
+        $bundle_data = $bundle_settings[$bundle->id()] ?? [];
+        $enabled = $bundle_data['enabled'] ?? 0;
 
-      $form['bundles'][$definition->id()] = [
-        '#type' => 'checkboxes',
-        '#title' => $this->t('Bundles'),
-        '#description' => $this->t('Select the bundles.'),
-        '#options' => $options,
-        '#default_value' => $config->get('bundles') ?: [],
-      ];
+        $form['bundles'][$bundle->id()] = [
+          '#type' => 'container',
+        ];
+
+        $form['bundles'][$bundle->id()]['enabled'] = [
+          '#type' => 'checkbox',
+          '#title' => $this->t('Enable for %label', ['%label' => $bundle->label()]),
+          '#default_value' => $enabled,
+        ];
+      }
     }
 
     return parent::buildForm($form, $form_state);
@@ -124,12 +127,28 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    parent::submitForm($form, $form_state);
+    $bundles_settings = [];
+    $definition = $this->entityTypeManager->getDefinition($this->type);
+    if ($definition->getBundleEntityType()) {
+      $bundles = $this->entityTypeManager
+        ->getStorage($definition->getBundleEntityType())
+        ->loadMultiple();
 
-    $settings = $this->config('node_lock.settings');
-    $settings->set('enabled', $form_state->getValue('enabled'));
-    $settings->set('bundles', array_keys(array_filter($form_state->getValue(['bundles', 'node']))));
-    $settings->save();
+      foreach ($bundles as $bundle) {
+        $values = $form_state->getValue(['bundles', $bundle->id()]);
+
+        $bundles_settings[$bundle->id()] = [
+          'enabled' => $values['enabled'] ?? 0,
+        ];
+      }
+    }
+
+    $this->config('node_lock.settings')
+      ->set('enabled', $form_state->getValue('enabled') ? 1 : 0)
+      ->set('bundles', $bundles_settings)
+      ->save();
+
+    parent::submitForm($form, $form_state);
   }
 
 }

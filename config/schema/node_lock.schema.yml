@@ -7,3 +7,9 @@ node_lock.settings:
     bundles:
       type: sequence
       label: 'Bundle type'
+      sequence:
+        type: mapping
+        mapping:
+          bundle:
+            type: string
+            label: 'Bundle name'

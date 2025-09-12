@@ -152,9 +152,8 @@ class Lock implements LockInterface {
    * @inheritDoc
    */
   public function isLockable(EntityInterface $entity): bool {
-    $bundle = $entity->bundle();
     $bundles = $this->configFactory->get('node_lock.settings')->get('bundles');
-    if (!in_array($bundle, $bundles)) {
+    if (!$bundles[$entity->bundle()]['enabled']) {
       return FALSE;
     }
 
