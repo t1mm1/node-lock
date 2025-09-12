@@ -75,15 +75,15 @@ class SettingsForm extends ConfigFormBase {
 
     $form['general'] = [
       '#type' => 'details',
-      '#title' => t('General'),
+      '#title' => $this->t('General'),
       '#open' => TRUE,
       '#weight' => -1,
     ];
 
     $form['general']['enabled'] = [
       '#type' => 'checkbox',
-      '#title' => t('Enable'),
-      '#description' => t('Enable lock/unlock service.'),
+      '#title' => $this->t('Enable'),
+      '#description' => $this->t('Enable lock/unlock service.'),
       '#default_value' => $config->get('enabled'),
       '#return_value' => 1,
       '#empty' => 0,

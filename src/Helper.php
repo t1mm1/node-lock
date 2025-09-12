@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 
 /**
@@ -186,12 +187,23 @@ class Helper {
    *   The lock entity.
    */
   public function setMessageAsUser(EntityInterface $entity): void {
-    $this->messenger->addMessage(
-      $this->t('@user has marked the node at <strong>@date</strong>.', [
-        '@user' => $this->getOwnerOrUserName($entity),
-        '@date' => $this->getDateCreated($entity),
-      ])
-    );
+    $message = $this->getMessageAsUser($entity);
+    $this->messenger->addMessage($message);
+  }
+
+  /**
+   * Help function for set message text for owner of lock.
+   *
+   * @param EntityInterface $entity
+   *   The lock entity.
+   * @return TranslatableMarkup
+   *   The message text.
+   */
+  public function getMessageAsUser(EntityInterface $entity): TranslatableMarkup {
+    return $this->t('@user has marked the node at <strong>@date</strong>.', [
+      '@user' => $this->getOwnerOrUserName($entity),
+      '@date' => $this->getDateCreated($entity),
+    ]);
   }
 
   /**
@@ -201,11 +213,22 @@ class Helper {
    *   The lock entity.
    */
   public function setMessageAsOwner(EntityInterface $entity): void {
-    $this->messenger->addMessage(
-      $this->t('You have locked the node at <strong>@date</strong>.', [
-        '@date' => $this->getDateCreated($entity),
-      ])
-    );
+    $message = $this->getMessageAsOwner($entity);
+    $this->messenger->addMessage($message);
+  }
+
+  /**
+   * Help function for set message text for user (not owner) of lock.
+   *
+   * @param EntityInterface $entity
+   *   The lock entity.
+   * @return TranslatableMarkup
+   *   The message text.
+   */
+  public function getMessageAsOwner(EntityInterface $entity): TranslatableMarkup {
+    return $this->t('You have locked the node at <strong>@date</strong>.', [
+      '@date' => $this->getDateCreated($entity),
+    ]);
   }
 
   /**
@@ -236,7 +259,7 @@ class Helper {
     $user = $entity->getUser();
 
     if (empty($user)) {
-      return t('[deleted user]');
+      return $this->t('[deleted user]');
     }
 
     if ($user->access('view', $this->currentUser, TRUE)->isAllowed()) {

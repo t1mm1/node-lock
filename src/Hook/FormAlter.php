@@ -74,16 +74,22 @@ class FormAlter {
       $lock = $this->lock->getLock($node);
 
       if (isset($form['advanced'])) {
-        $form['node_lock_options'] = [
-          '#type' => 'details',
-          '#title' => t('Lock node settings'),
-          '#description' => t('Current node was marked as locked.<br /><br />To change the default settings go to @settings_link.', [
+        $description = $is_owner ? $this->helper->getMessageAsOwner($lock) : $this->helper->getMessageAsUser($lock);
+        if ($this->currentUser->hasPermission('administer site configuration')) {
+          $description .= '<br /><br />';
+          $description .= $this->t('To change the default settings go to @settings_link.', [
             '@settings_link' => Link::fromTextAndUrl(t('settings page'), Url::fromRoute('node_lock.settings', [], [
               'attributes' => [
                 'target' => '_blank',
               ],
             ]))->toString(),
-          ]),
+          ]);
+        }
+
+        $form['node_lock_options'] = [
+          '#type' => 'details',
+          '#title' => $this->t('Lock node settings'),
+          '#description' => $description,
           '#group' => 'advanced',
           '#weight' => 20,
           '#attributes' => [
