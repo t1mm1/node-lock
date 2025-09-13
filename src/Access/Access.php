@@ -15,7 +15,7 @@ class Access implements AccessInterface {
   /**
    * Lock service.
    *
-   * @var \Drupal\node_lock\Lock\LockInterface
+   * @var LockInterface
    */
   protected LockInterface $lock;
 

@@ -28,7 +28,6 @@ class NodeLockHelper {
    * The date formatter service.
    *
    * @var DateFormatter
-   *   The date formatter service.
    */
   protected DateFormatter $dateFormatter;
 
@@ -273,7 +272,7 @@ class NodeLockHelper {
    *
    * @param EntityInterface $entity
    *   The lock entity.
-   * 
+   *
    * @return mixed
    *   The username, or link to profile.
    */

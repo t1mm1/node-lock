@@ -30,7 +30,6 @@ class Lock implements LockInterface {
    * The account service.
    *
    * @var AccountProxyInterface
-   *   The account service.
    */
   protected AccountProxyInterface $currentUser;
 
@@ -38,7 +37,6 @@ class Lock implements LockInterface {
    * The config service.
    *
    * @var ConfigFactoryInterface
-   *   The config settings.
    */
   protected ConfigFactoryInterface $configFactory;
 
