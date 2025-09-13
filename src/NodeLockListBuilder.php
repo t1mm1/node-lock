@@ -17,7 +17,6 @@ class NodeLockListBuilder extends EntityListBuilder {
    * The date formatter service.
    *
    * @var DateFormatter
-   *   The date formatter service.
    */
   protected DateFormatter $dateFormatter;
 

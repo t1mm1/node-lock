@@ -3,7 +3,6 @@
 namespace Drupal\node_lock\Lock;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\node_lock\Entity\LockEntity;
 
 /**
  * Interface of Lock service.
@@ -13,7 +12,7 @@ interface LockInterface {
   /**
    * Get locked entity.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param EntityInterface $entity
    *   The entity that has lock or not.
    *
    * @return EntityInterface|false
@@ -24,7 +23,7 @@ interface LockInterface {
   /**
    * Get locked entity.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param EntityInterface $entity
    *   The entity to lock.
    *
    * @return bool
@@ -43,7 +42,7 @@ interface LockInterface {
   /**
    * Set lock for entity.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param EntityInterface $entity
    *   The entity.
    *
    * @return EntityInterface|false
@@ -54,7 +53,7 @@ interface LockInterface {
   /**
    * Delete lock entity.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param EntityInterface $entity
    *   The entity.
    *
    * @return bool
@@ -65,7 +64,7 @@ interface LockInterface {
   /**
    * Check whether a node is configured to be locked.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param EntityInterface $entity
    *   The entity to check.
    *
    * @return bool
@@ -76,7 +75,7 @@ interface LockInterface {
   /**
    * Check lock status.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param EntityInterface $entity
    *   The entity.
    *
    * @return bool
@@ -87,7 +86,7 @@ interface LockInterface {
   /**
    * Check lock status by user.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param EntityInterface $entity
    *   The entity.
    * @param int $uid
    *   The user id.

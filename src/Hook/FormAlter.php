@@ -74,7 +74,10 @@ class FormAlter {
       $lock = $this->lock->getLock($node);
 
       if (isset($form['advanced'])) {
-        $description = $is_owner ? $this->nodeLockHelper->getMessageAsOwner($lock) : $this->nodeLockHelper->getMessageAsUser($lock);
+        $description = $is_owner ?
+          $this->nodeLockHelper->getMessageAsOwner($lock) :
+          $this->nodeLockHelper->getMessageAsUser($lock);
+
         if ($this->currentUser->hasPermission('administer site configuration')) {
           $description .= '<br /><br />' . $this->t('To change the default settings go to @settings_link.', [
             '@settings_link' => Link::fromTextAndUrl(t('settings page'), Url::fromRoute('node_lock.settings', [], [

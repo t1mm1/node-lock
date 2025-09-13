@@ -5,9 +5,9 @@ namespace Drupal\node_lock;
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 
 /**
@@ -188,7 +188,7 @@ class NodeLockHelper {
    */
   public function setMessageAsUser(EntityInterface $entity): void {
     $message = $this->getMessageAsUser($entity);
-    $this->messenger->addMessage($message);
+    $this->messenger->addMessage(Markup::create($message));
   }
 
   /**
@@ -196,14 +196,24 @@ class NodeLockHelper {
    *
    * @param EntityInterface $entity
    *   The lock entity.
-   * @return TranslatableMarkup
+   * @param bool $clean
+   *   The flag for clean message.
+   *
+   * @return string
    *   The message text.
    */
-  public function getMessageAsUser(EntityInterface $entity): TranslatableMarkup {
-    return $this->t('@user has marked the node at <strong>@date</strong>.', [
+  public function getMessageAsUser(EntityInterface $entity, bool $clean = FALSE): string {
+    $message = $this->t('@user has marked the node at <strong>@date</strong>.', [
       '@user' => $this->getOwnerOrUserName($entity),
       '@date' => $this->getDateCreated($entity),
     ]);
+
+    if ($clean) {
+      $message = str_replace('<br />', '&nbsp;', $message);
+      $message = strip_tags($message);
+    }
+
+    return $message;
   }
 
   /**
@@ -214,7 +224,7 @@ class NodeLockHelper {
    */
   public function setMessageAsOwner(EntityInterface $entity): void {
     $message = $this->getMessageAsOwner($entity);
-    $this->messenger->addMessage($message);
+    $this->messenger->addMessage(Markup::create($message));
   }
 
   /**
@@ -222,13 +232,23 @@ class NodeLockHelper {
    *
    * @param EntityInterface $entity
    *   The lock entity.
-   * @return TranslatableMarkup
+   * @param bool $clean
+   *   The flag for clean message.
+   *
+   * @return string
    *   The message text.
    */
-  public function getMessageAsOwner(EntityInterface $entity): TranslatableMarkup {
-    return $this->t('You have locked the node at <strong>@date</strong>.', [
+  public function getMessageAsOwner(EntityInterface $entity, bool $clean = FALSE): string {
+    $message = $this->t('You have locked the node at <strong>@date</strong>.', [
       '@date' => $this->getDateCreated($entity),
     ]);
+
+    if ($clean) {
+      $message = str_replace('<br />', '&nbsp;', $message);
+      $message = strip_tags($message);
+    }
+
+    return $message;
   }
 
   /**
@@ -236,6 +256,7 @@ class NodeLockHelper {
    *
    * @param EntityInterface $entity
    *   The lock entity.
+   *
    * @return string
    *   The date in custom format.
    */
@@ -252,6 +273,7 @@ class NodeLockHelper {
    *
    * @param EntityInterface $entity
    *   The lock entity.
+   * 
    * @return mixed
    *   The username, or link to profile.
    */

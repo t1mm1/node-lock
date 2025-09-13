@@ -17,9 +17,8 @@ class LockForm extends ConfirmFormBase {
 
   /**
    * The entity to lock.
-   * *
-   * * @var NodeInterface
-   * *   The current_user service.
+   *
+   * @var NodeInterface
  */
   protected $entity;
 
