@@ -5,7 +5,7 @@ namespace Drupal\node_lock\Hook;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-use Drupal\node_lock\Helper;
+use Drupal\node_lock\NodeLockHelper;
 use Drupal\node_lock\Lock\LockInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
@@ -26,7 +26,7 @@ class FormAlter {
 
   public function __construct(
     private LockInterface $lock,
-    private Helper $helper,
+    private NodeLockHelper $nodeLockHelper,
     private MessengerInterface $messenger,
     private ConfigFactoryInterface $configFactory,
     private AccountInterface $currentUser,
@@ -59,12 +59,12 @@ class FormAlter {
     }
 
     // Check is it edit form and set visible for lock/unlock buttons.
-    $is_edit_form = $this->helper->isFormEdit($node, $form_id);
+    $is_edit_form = $this->nodeLockHelper->isFormEdit($node, $form_id);
 
     $is_locked_entity = $this->lock->isLockedEntity($node);
     // If node was not locked yet.
     if (!$is_locked_entity) {
-      $form['actions']['lock'] = $this->helper->getButton($node, FALSE, $is_edit_form);
+      $form['actions']['lock'] = $this->nodeLockHelper->getButton($node, FALSE, $is_edit_form);
     }
 
     // If entity has lock.
@@ -74,7 +74,7 @@ class FormAlter {
       $lock = $this->lock->getLock($node);
 
       if (isset($form['advanced'])) {
-        $description = $is_owner ? $this->helper->getMessageAsOwner($lock) : $this->helper->getMessageAsUser($lock);
+        $description = $is_owner ? $this->nodeLockHelper->getMessageAsOwner($lock) : $this->nodeLockHelper->getMessageAsUser($lock);
         if ($this->currentUser->hasPermission('administer site configuration')) {
           $description .= '<br /><br />' . $this->t('To change the default settings go to @settings_link.', [
             '@settings_link' => Link::fromTextAndUrl(t('settings page'), Url::fromRoute('node_lock.settings', [], [
@@ -99,27 +99,27 @@ class FormAlter {
       }
 
       if (!$is_owner) {
-        $this->helper->setMessageAsUser($lock);
+        $this->nodeLockHelper->setMessageAsUser($lock);
       }
       else {
-        $this->helper->setMessageAsOwner($lock);
+        $this->nodeLockHelper->setMessageAsOwner($lock);
       }
 
-      if ($this->helper->isFormDelete($node, $form_id) && $is_owner) {
+      if ($this->nodeLockHelper->isFormDelete($node, $form_id) && $is_owner) {
         return;
       }
 
       // Disable form.
-      $this->helper->disableForm($form);
+      $this->nodeLockHelper->disableForm($form);
 
       // Unset actions.
-      $this->helper->unsetActions($form, $is_owner);
+      $this->nodeLockHelper->unsetActions($form, $is_owner);
 
       // Unset state.
-      $this->helper->unsetModerationState($form);
+      $this->nodeLockHelper->unsetModerationState($form);
 
       // Add button.
-      $form['actions']['unlock'] = $this->helper->getButton($node, TRUE, $is_edit_form, $is_owner, $this->lock->isBypass());
+      $form['actions']['unlock'] = $this->nodeLockHelper->getButton($node, TRUE, $is_edit_form, $is_owner, $this->lock->isBypass());
     }
   }
 

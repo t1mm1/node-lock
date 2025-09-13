@@ -25,7 +25,7 @@ use Drupal\user\UserInterface;
  *   },
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "list_builder" = "Drupal\node_lock\NodeLockListBuilder",
+ *     "list_builder" = "Drupal\node_lock\ListBuilder\NodeLockListBuilder",
  *     "form" = {
  *       "delete" = "Drupal\node_lock\Form\LockDeleteForm",
  *     },
@@ -107,7 +107,7 @@ class LockEntity extends ContentEntityBase implements EntityOwnerInterface {
   /**
    * Return user entity.
    *
-   * @return \Drupal\user\UserInterface|null
+   * @return UserInterface|null
    *   User entity.
    */
   public function getUser(): ?UserInterface {

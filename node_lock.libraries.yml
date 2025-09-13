@@ -1,0 +1,5 @@
+icon:
+  version: 1.0.0
+  css:
+    component:
+      css/lock.icon.css: { }

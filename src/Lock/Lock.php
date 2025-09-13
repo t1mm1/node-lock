@@ -108,7 +108,7 @@ class Lock implements LockInterface {
    * @inheritDoc
    */
   public function isBypass(): bool {
-    return $this->currentUser->hasPermission('bypass unlock');
+    return $this->currentUser->hasPermission('node lock bypass unlock');
   }
 
   /**

@@ -11,23 +11,23 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 
 /**
- * Represents a Helper service.
+ * Represents a Node Lock Helper service.
  */
-class Helper {
+class NodeLockHelper {
 
   use StringTranslationTrait;
 
   /**
    * The usage url service.
    *
-   * @var \Drupal\Core\Messenger\MessengerInterface
+   * @var MessengerInterface
    */
   protected $messenger;
 
   /**
    * The date formatter service.
    *
-   * @var \Drupal\Core\Datetime\DateFormatter
+   * @var DateFormatter
    *   The date formatter service.
    */
   protected DateFormatter $dateFormatter;
@@ -35,18 +35,18 @@ class Helper {
   /**
    * The current user.
    *
-   * @var \Drupal\Core\Session\AccountInterface
+   * @var AccountInterface
    */
   protected AccountInterface $currentUser;
 
   /**
-   * Constructs a new Helper object.
+   * Constructs a new Node Lock Helper object.
    *
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   * @param MessengerInterface $messenger
    *   The entity repository manager.
-   * @param \Drupal\Core\Datetime\DateFormatter $dateFormatter
+   * @param DateFormatter $dateFormatter
    *   The date formatter service.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
+   * @param AccountInterface $current_user
    *   Current user account.
    */
   public function __construct(

@@ -13,7 +13,7 @@ interface AccessInterface {
   /**
    * Get lock access.
    *
-   * @param \Drupal\node\NodeInterface $node
+   * @param NodeInterface $node
    *   The entity that has lock or not.
    *
    * @return AccessResultInterface
@@ -24,7 +24,7 @@ interface AccessInterface {
   /**
    * Get unlock access.
    *
-   * @param \Drupal\node\NodeInterface $node
+   * @param NodeInterface $node
    *   The entity that has lock or not.
    *
    * @return AccessResultInterface

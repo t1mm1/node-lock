@@ -17,7 +17,7 @@ services:
     tags:
       - { name: access_check }
   node_lock.helper:
-    class: Drupal\node_lock\Helper
+    class: Drupal\node_lock\NodeLockHelper
     arguments: [
       '@messenger',
       '@date.formatter',
@@ -28,4 +28,4 @@ services:
 
   Drupal\node_lock\Lock\LockInterface: '@node_lock.lock'
   Drupal\node_lock\Access\AccessInterface: '@node_lock.access'
-  Drupal\node_lock\Helper: '@node_lock.helper'
+  Drupal\node_lock\NodeLockHelper: '@node_lock.helper'

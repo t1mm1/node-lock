@@ -18,7 +18,7 @@ class UnlockForm extends ConfirmFormBase {
   /**
    * The entity to lock.
    * *
-   * * @var \Drupal\node\NodeInterface
+   * * @var NodeInterface
    * *   The current_user service.
  */
   protected $entity;

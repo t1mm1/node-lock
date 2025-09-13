@@ -18,7 +18,7 @@ class LockForm extends ConfirmFormBase {
   /**
    * The entity to lock.
    * *
-   * * @var \Drupal\node\NodeInterface
+   * * @var NodeInterface
    * *   The current_user service.
  */
   protected $entity;
@@ -26,7 +26,7 @@ class LockForm extends ConfirmFormBase {
   /**
    * Lock service.
    *
-   * @var \Drupal\node_lock\Lock\LockInterface
+   * @var LockInterface
    */
   protected LockInterface $lock;
 

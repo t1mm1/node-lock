@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\node_lock;
+namespace Drupal\node_lock\ListBuilder;
 
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Entity\EntityInterface;
