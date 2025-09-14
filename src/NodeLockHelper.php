@@ -208,7 +208,6 @@ class NodeLockHelper {
     ]);
 
     if ($clean) {
-      $message = str_replace('<br />', '&nbsp;', $message);
       $message = strip_tags($message);
     }
 
@@ -243,7 +242,6 @@ class NodeLockHelper {
     ]);
 
     if ($clean) {
-      $message = str_replace('<br />', '&nbsp;', $message);
       $message = strip_tags($message);
     }
 

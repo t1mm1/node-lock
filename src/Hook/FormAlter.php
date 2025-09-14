@@ -78,16 +78,6 @@ class FormAlter {
           $this->nodeLockHelper->getMessageAsOwner($lock) :
           $this->nodeLockHelper->getMessageAsUser($lock);
 
-        if ($this->currentUser->hasPermission('administer site configuration')) {
-          $description .= '<br /><br />' . $this->t('To change the default settings go to @settings_link.', [
-            '@settings_link' => Link::fromTextAndUrl(t('settings page'), Url::fromRoute('node_lock.settings', [], [
-              'attributes' => [
-                'target' => '_blank',
-              ],
-            ]))->toString(),
-          ]);
-        }
-
         $form['node_lock_options'] = [
           '#type' => 'details',
           '#title' => $this->t('Lock node settings'),
@@ -99,6 +89,23 @@ class FormAlter {
           ],
           '#open' => 1,
         ];
+
+        if ($this->currentUser->hasPermission('administer site configuration')) {
+          $form['node_lock_options']['description'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'div',
+            '#value' => $this->t('To change the default settings go to @settings_link.', [
+              '@settings_link' => Link::fromTextAndUrl(t('settings page'), Url::fromRoute('node_lock.settings', [], [
+                'attributes' => [
+                  'target' => '_blank',
+                ],
+              ]))->toString(),
+            ]),
+            '#attributes' => [
+              'class' => ['form-item__description'],
+            ]
+          ];
+        }
       }
 
       if (!$is_owner) {
