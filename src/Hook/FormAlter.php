@@ -90,7 +90,7 @@ class FormAlter {
           '#open' => 1,
         ];
 
-        if ($this->currentUser->hasPermission('administer site configuration')) {
+        if ($this->currentUser->hasPermission('administer node lock configuration')) {
           $form['node_lock_options']['description'] = [
             '#type' => 'html_tag',
             '#tag' => 'div',

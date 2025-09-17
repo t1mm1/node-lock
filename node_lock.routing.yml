@@ -25,11 +25,11 @@ node_lock.form.unlock:
         type: entity:node
 
 node_lock.settings:
-  path: '/admin/config/content/node-lock-settings'
+  path: '/admin/config/content/node-lock'
   defaults:
     _form: '\Drupal\node_lock\Form\SettingsForm'
     _title: 'Node lock settings'
   requirements:
-    _permission: 'administer site configuration'
+    _permission: 'administer node lock configuration'
   options:
     _admin_route: TRUE
