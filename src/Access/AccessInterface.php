@@ -11,6 +11,17 @@ use Drupal\node\NodeInterface;
 interface AccessInterface {
 
   /**
+   * Get lock access conditions.
+   *
+   * @param array $conditions
+   *   The access conditions.
+   *
+   * @return AccessResultInterface
+   *   The lock access.
+   */
+  public function checkConditions(array $conditions, $config): AccessResultInterface;
+
+  /**
    * Get lock access.
    *
    * @param NodeInterface $node

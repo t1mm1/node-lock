@@ -13,6 +13,7 @@ services:
     class: Drupal\node_lock\Access\Access
     arguments: [
       '@node_lock.lock',
+      '@config.factory',
     ]
     tags:
       - { name: access_check }

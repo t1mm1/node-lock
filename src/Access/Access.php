@@ -4,6 +4,8 @@ namespace Drupal\node_lock\Access;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\node\NodeInterface;
 use Drupal\node_lock\Lock\LockInterface;
 
@@ -11,6 +13,13 @@ use Drupal\node_lock\Lock\LockInterface;
  * Interface of Access service.
  */
 class Access implements AccessInterface {
+
+  /**
+   * Lock service configs.
+   *
+   * @var ImmutableConfig
+   */
+  protected ImmutableConfig $configs;
 
   /**
    * Lock service.
@@ -22,63 +31,47 @@ class Access implements AccessInterface {
   /**
    * @inheritDoc
    */
-  public function __construct(LockInterface $lock) {
+  public function __construct(
+    LockInterface $lock,
+    ConfigFactoryInterface $config_factory,
+  ) {
     $this->lock = $lock;
+    $this->configs = $config_factory->get('node_lock.settings');
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public function checkConditions(array $conditions, $config): AccessResultInterface {
+    foreach ($conditions as $condition) {
+      if (!$condition) {
+        return AccessResult::forbidden()->addCacheableDependency($config);
+      }
+    }
+    return AccessResult::allowed()->addCacheableDependency($config);
   }
 
   /**
    * @inheritDoc
    */
   public function lock(NodeInterface $node): AccessResultInterface {
-    // If service not enabled.
-    if (!$this->lock->isEnabled()) {
-      return AccessResult::forbidden();
-    }
-
-    // If entity is not lockable.
-    if (!$this->lock->isLockable($node)) {
-      return AccessResult::forbidden();
-    }
-
-    // If entity already locked.
-    if ($this->lock->isLockedEntity($node)) {
-      return AccessResult::forbidden();
-    }
-
-    $access = AccessResult::allowed();
-    $access->addCacheableDependency(NULL);
-
-    return $access;
+    return $this->checkConditions([
+      $this->lock->isEnabled(),
+      $this->lock->isLockable($node),
+      !$this->lock->isLockedEntity($node),
+    ], $this->configs);
   }
 
   /**
    * @inheritDoc
    */
   public function unlock(NodeInterface $node): AccessResultInterface {
-    // If service not enabled.
-    if (!$this->lock->isEnabled()) {
-      return AccessResult::forbidden();
-    }
-
-    // If entity is not lockable.
-    if (!$this->lock->isLockable($node)) {
-      return AccessResult::forbidden();
-    }
-
-    // If entity is not locked.
-    if (!$this->lock->isLockedEntity($node)) {
-      return AccessResult::forbidden();
-    }
-
-    // If user not owner of lock or has no permissions for unlock bypass.
-    if (!$this->lock->isOwner($node) && !$this->lock->isBypass()) {
-      return AccessResult::forbidden();
-    }
-
-    $access = AccessResult::allowed();
-    $access->addCacheableDependency(NULL);
-
-    return $access;
+    return $this->checkConditions([
+      $this->lock->isEnabled(),
+      $this->lock->isLockable($node),
+      $this->lock->isLockedEntity($node),
+      $this->lock->isOwner($node) || $this->lock->isBypass(),
+    ], $this->configs);
   }
 
 }
